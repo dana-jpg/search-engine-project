@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="title"></h1>
+        <h1 class="py-2 my-2"></h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-4">
+                    <img src="{% static 'tubingen-bing.png' %}" alt="Icon of the Search Engine" class="img-fluid">
+                </div>
+                <form class="form" action="/search/" method="get" onsubmit="return validateForm()">
+                    <div class="input-group">
+                        <input class="form-control form-control-lg input is-large" type="text" id="queryField" name="queryField" placeholder="Enter your query">
+                        <div class="input-group-append">
+                            <div class="select-main-page is large">
+                                <select class="ranker-kind-select form-control" id="ranker_select" name="ranker_select">
+                                    <option value="TF-IDF">TF-IDF</option>
+                                    <option value="BM25">BM-25</option>
+                                    <option value="Feature_embedding">Feature-based</option>
+                                    <option value="Pseudo_relevance_feedback">Pseudo-relevance feedback</option>
+                                    <option value="Merge">Mixture</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group-append">
+                            <button class="button is-link is-large" type="submit">
+                                <span class="icon">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div id="error-message" class="text-danger mt-2" style="display: none;">Please enter a query first.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function validateForm() {
+        var queryField = document.getElementById("queryField").value.trim();
+        if (queryField === "") {
+            document.getElementById("error-message").style.display = "block";
+            return false;
+        }
+        return true;
+    }
+</script>
+
+{% endblock %}

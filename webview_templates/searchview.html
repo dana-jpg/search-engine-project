@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!--<section class="section">-->
+    <!--this is the top row with the picture and the search bar as well as the buttons-->
+    <div class="row">
+        <div class="column" style="float: left; margin-left: 30px">
+            <div class="logo">
+                <a href="{% url 'startpage' %}">
+                    <img src="{% static 'tubingen-bing-cropped.png' %}" alt="Logo of TüBing" style="max-height: 100%; max-width: 100%; width:auto; height:auto;">
+                </a>
+            </div>
+        </div>
+        <div class="column is-flex is-align-items-center">
+            <form class="columns" action="/search/" method="get">
+                <!--return to start page button-->
+                <div class="column">
+                    <a class="button is-info" href="{% url 'startpage' %}">
+                        <span class="icon">
+                            <i class="fas fa-arrow-left"></i>
+                        </span>
+                    </a>
+                </div>
+                <!--search bar-->
+                <div class="column">
+                    <input class="input is-expanded-field" type="text" id="queryField" name="queryField" value="{{ query }}">
+                </div>
+                <!--select ranker-->
+                <div class="column select-search-page">
+                    <select class="ranker-kind-select_searchview" id="ranker_select" name="ranker_select" value="{{ request.GET.ranker_select|default:'BM25'}}">
+                        <option {% if ranking_method == 'TF-IDF' %} selected {% endif %} value="TF-IDF">TF-IDF</option>
+                        <option {% if ranking_method == 'BM25' %} selected {% endif %} value="BM25">BM-25</option>
+                        <option {% if ranking_method == 'Feature_embedding' %} selected {% endif %} value="Feature_embedding">Feature-based</option>
+                        <option {% if ranking_method == 'Pseudo_relevance_feedback' %} selected {% endif %} value="Pseudo_relevance_feedback">Pseudo-relevance feedback</option>
+                        <option {% if ranking_method == 'Merge' %} selected {% endif %} value="Merge">Mixture</option>
+                    </select>
+                </div>
+                <!--search button-->
+                <div class="column">
+                    <button class="button is-link" type="submit" style="border-radius: 4px">
+                        <span class="icon">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+    <!--This is the next row of the page: you searched for and change all playback speeds-->
+    <div class="columns is-vcentered">
+        <div class="column">
+            <h4 class="subtitle is-6">You searched for: {{ query }}</h4>
+        </div>
+        <div class="column">
+            <div class="is-expanded dropdown-container">
+                <div class="dropdown-content">
+                    <label><b>Change all</b> playback speeds: </label>
+                    <select id="speedchange_all" onchange="changeAllSpeeds(this.value)">
+                        <option value="1">1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="1.75">1.75x</option>
+                        <option value="2">2x</option>
+                        <option value="2.25">2.25x</option>
+                        <option value="2.5">2.5x</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="search-result-section">
+        <!--first three results as one column-->
+        <div class="columns is-multiline">
+            {% for link, title, content in search_results|slice:"0:3" %}
+                {% for audio_file in audio_files|slice:"0:3" %}
+                    {% if forloop.counter0 == forloop.parentloop.counter0 %}
+                        <div class="column is-full">
+                            <div class="box has-background-grey-dark has-text-light has-border">
+                                <a href="{{ link }}" class="hover-link-white">
+                                    <p class="website-title"><b>{{ title }}</b></p>
+                                    <div class="search-result-content">
+                                        <p>{{ content }}</p>
+                                    </div>
+                                    <div class="row" style="display: flex; align-items: center;">
+                                        <div class="col-md-6">
+                                            <p>Link: <a href="{{ link }}" class="hover-link-white">{{ link }}</a></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="audio-player">
+                                                <audio src="/media/{{ audio_file}}" id="audio{{ forloop.parentloop.counter0 }}" controls></audio>
+                                                <label for="speed">Speed:</label>
+                                                <select id="speed" onchange="changePlaybackSpeed({{ forloop.parentloop.counter0 }}, this.value)">
+                                                    <option value="1">1x</option>
+                                                    <option value="1.25">1.25x</option>
+                                                    <option value="1.5">1.5x</option>
+                                                    <option value="1.75">1.75x</option>
+                                                    <option value="2">2x</option>
+                                                    <option value="2.25">2.25x</option>
+                                                    <option value="2.5">2.5x</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <!--other search results as two columns-->
+        <div class="columns is-multiline">
+ 
+            {% for link, title, content in search_results|slice:"3:11" %}
+                {% for audio_file in audio_files|slice:"3:11" %}
+                    {% if forloop.counter0 == forloop.parentloop.counter0 %}
+                        <div class="column is-half">
+                            <div class="search-result-container">
+                            <div class="box has-background-grey-dark has-text-light has-border">
+                                <a href="{{ link }}" class="hover-link-white">
+                                    <p class="website-title"><b>{{ title }}</b></p>
+                                    <div class="search-result-content">
+                                        <p>{{ content }}</p>
+                                    </div>
+                                    <p>Link: <a href="{{ link }}" class="hover-link-white">{{ link }}</a></p>
+                                    <div class="audio-player">
+                                        {% with counter_value=forloop.parentloop.counter0|add:3 %}
+                                            <audio src="/media/{{ audio_file }}" id="audio{{ counter_value }}" controls></audio>
+                                            <label for="speed">Speed:</label>
+                                            <select id="speed" onchange="changePlaybackSpeed({{ counter_value }}, this.value)">
+                                                <option value="1">1x</option>
+                                                <option value="1.25">1.25x</option>
+                                                <option value="1.5">1.5x</option>
+                                                <option value="1.75">1.75x</option>
+                                                <option value="2">2x</option>
+                                                <option value="2.25">2.25x</option>
+                                                <option value="2.5">2.5x</option>
+                                            </select>
+                                        {% endwith %}
+                                    </div>
+                                </a>
+                            </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+
+
+
+        <div class="columns is-centered">
+            {% if show_previous %}
+                <div class="button-container">
+                    <form class="form" action="/search/" method="get" style="display:inline;">
+                        <input type="hidden" name="queryField" value="{{ query }}">
+                        <input type="hidden" name="start_index" value="{{ previous_start_index }}">
+                        <input type="hidden" name="ranker_select" value="{{ request.GET.ranker_select|default:'BM25' }}">
+                        <button class="button is-link page-change-button" type="submit">Show Previous 11 Results</button>
+                    </form>
+            </div>
+            {% endif %}
+
+            {% if show_more %}
+                <div class="button-container">
+                    <form class="form" action="/search/" method="get" style="display: inline">
+                        <input type="hidden" name="queryField" value="{{ query }}">
+                        <input type="hidden" name="start_index" value="{{ next_start_index }}">
+                        <input type="hidden" name="ranker_select" value="{{ request.GET.ranker_select|default:'BM25' }}">
+                        <button class="button is-link page-change-button" type="submit">Show next {{ remaining_elements }} Results</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+<!--scripts-->
+    <!--script for audio player-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Function to update the input fields with the selected value
+        function updateInputs(selectedValue) {
+            // Get the input elements at the bottom
+            const inputElements = document.querySelectorAll('.update-on-select');
+            inputElements.forEach((input) => {
+                input.value = selectedValue;
+            });
+        }
+
+        // Event listener for the ranker_select dropdown
+        const rankerSelect = document.getElementById('ranker_select');
+        rankerSelect.addEventListener('change', function () {
+            const selectedValue = rankerSelect.value;
+            updateInputs(selectedValue); // Call the function to update the input fields
+        });
+
+        function changeAllSpeeds(speed) {
+        const audioPlayers = document.querySelectorAll('.audio-player');
+        audioPlayers.forEach((player, index) => {
+            const selectElement = player.querySelector('select');
+            selectElement.value = speed; // Update the displayed value of the select element
+            changePlaybackSpeed(index, speed); // Update the playback speed of the audio element
+        });
+        }
+
+        // Function to change the playback speed of the audio
+        function changePlaybackSpeed(index, speed) {
+        const audioElement = document.getElementById('audio' + index);
+        audioElement.playbackRate = parseFloat(speed);
+        }
+        // Event listener for the speed dropdown at the top
+        const dropdownTop = document.getElementById('speedchange_all');
+        dropdownTop.addEventListener('change', function () {
+            const selectedSpeed = dropdownTop.value;
+            changeAllSpeeds(selectedSpeed);
+        });
+    </script>
+
+
+    <!--script to get max box size-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+        // Calculate the maximum height among all the boxes
+        function setMaxHeight() {
+            var maxHeight = 0;
+            $('.search-result-container .box').each(function() {
+            var height = $(this).height();
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
+            });
+            // Apply the maximum height to all the boxes
+            $('.search-result-container .box').height(maxHeight);
+        }
+
+        // Call the setMaxHeight function on page load and when the window is resized
+        setMaxHeight();
+        $(window).resize(function() {
+            setMaxHeight();
+        });
+        });
+    </script>
+
+{% endblock %}

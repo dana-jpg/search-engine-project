@@ -1,0 +1,348 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+        <style>
+            :root{
+                --turquoise:#266D7A;
+                --white-smoke:#F5F5F5;
+                --orange:#FF9944;
+                --middle-grey:#525252;
+                --dark-grey:#363636;
+                --placeholder-text-color:#ADADAD;
+            }
+
+            body {
+                background-color: var(--dark-grey);
+                color: var(--white-smoke);
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+            }
+
+            section {
+                background-color: var(--dark-grey);
+                padding: 0;
+                margin: 0;
+                height: 100%;
+                width: 100%;
+            }
+
+
+            {#Formatting columns#}
+            .columns{
+                /*display:flex;*/
+                align-items: center;
+                background-color: var(--dark-grey);
+                padding: 0;
+                margin-left: 5rem;
+                margin-right: 5rem;
+            }
+
+            .is-flex-grow-1 {
+                flex: 1;
+            }
+            .column.is-8 {
+                margin: auto;
+            }
+
+             .subtitle.is-6{
+                font-weight: bold;
+            }
+
+            a {
+                color: var(--placeholder-text-color);
+            }
+
+            .button.is-info:hover, .button.is-link:hover {
+                background-color: var(--orange); /*
+                 Orange */
+            }
+
+
+
+
+
+            .dropdown-content{
+                background-color: var(--dark-grey);
+            }
+
+
+            {#landing page css#}
+            .title, .label, .subtitle {
+                color: var(--white-smoke);
+            }
+
+            {#set top padding above logo and search bar#}
+            .container, .search-container{
+                padding: 2rem;
+            }
+
+            {#Buttons#}
+            .button.is-info, .button.is-link {
+                background-color: var(--turquoise); 
+            }
+
+            /*search icon*/
+            .button.is-link.is-large {
+                height: 3rem;
+                margin-left: 5px;
+            }
+
+            {#Button for previous and next pages on searchview#}
+            .page-change-button {
+                width: 250px;
+                margin: 10px 150px 25px 150px;
+            }
+
+            {#Input field or search bar#}
+            .input.is-large {
+                height: 3rem;
+            }
+            .input:focus {
+                border-color: var(--orange);
+                box-shadow: 0 0 0 0.5px var(--orange);
+            }
+            .field.has-addons {
+                display: flex;
+                align-items: stretch;
+                flex: 1;
+            }
+                        .input.is-expanded-field {
+                width: 500px;
+                overflow: scroll;
+            }
+            .input::placeholder {
+                color: var(--placeholder-text-color); /* Placeholder Text Color */
+            }
+            {#Dropdown for input field#}
+            .dropdown-container{
+                display:flex;
+                justify-content: flex-end;
+            }
+
+            {#Image logo#}
+            .logo img{
+            width: 200%;
+            height: 200%;
+            }
+
+            .logo_image_div {
+                align-content: baseline;
+            }
+
+
+            {#Selects #}
+            .ranker-kind-select{
+                max-width: 100px
+            }
+            .ranker-kind-select_searchview{
+                max-width: 150px;
+            }
+            .select-search-page {
+                width: 100%;
+                flex: 1;
+                align-items: stretch;
+            }
+            .select select {
+                    background-color: var(--turquoise);
+                    color: var(--white-smoke);
+                    border: 1px solid var(--dark-grey);
+                    border-radius: 0;
+                    padding: 6px;
+                    margin-left: 5px;
+            }
+            .select .select-main-page select:hover{
+                background-color: var(--orange);
+            }
+            .select select:focus{
+                background-color: var(--turquoise);
+                color: var(--white-smoke);
+                border-color: var(--orange);
+                box-shadow: 0 0 0 0.5px var(--orange);
+            }
+            .select select.option:focus{
+                color: var(--orange);
+            }
+            .select option:hover{
+                color: var(--orange)
+            }
+
+            {#Select for ranker field of Mainview #}
+            .select-main-page select {
+                    height: 3rem;
+                    background-color: var(--turquoise);
+                    color: var(--white-smoke);
+                    border: 1px solid var(--dark-grey);
+                    border-radius: 4px;
+                    padding: 6px;
+                    margin-left: 5px;
+                }
+
+            .select-main-page select:hover{
+                background-color: var(--orange);
+            }
+            .select-main-page select:focus{
+                background-color: var(--turquoise);
+                color: var(--white-smoke);
+                border-color: var(--orange);
+                box-shadow: 0 0 0 0.5px var(--orange);
+            }
+            .select-main-page select.option:focus{
+                color: var(--orange);
+            }
+            .select-main-page option:hover{
+                color: var(--orange)
+            }
+
+            {#Selector for ranking method in search page#}
+            .select-search-page select {
+                height: 2.5rem;
+                background-color: var(--turquoise);
+                color: var(--white-smoke);
+                border: 1px solid var(--dark-grey);
+                border-radius: 4px;
+                padding: 6px;
+                margin-left: 5px;
+            }
+            .select-search-page select:hover{
+                background-color: var(--orange);
+            }
+            .select-search-page select:focus{
+                background-color: var(--turquoise);
+                color: var(--white-smoke);
+                border-color: var(--orange);
+                box-shadow: 0 0 0 0.5px var(--orange);
+            }
+            .select-search-page select.option:focus{
+                color: var(--orange);
+            }
+            .select-search-page option:hover{
+                color: var(--orange)
+            }
+
+
+
+
+
+
+
+
+            /*wrapper for same background-color for all results*/ 
+            .search-result-section{
+                background-color: var(--dark-grey);
+                padding: 0;
+                margin: 0;
+            }
+
+            .website-title{
+                font-size: 32px;
+            }
+
+            .search-result-content{
+                width: 66.66%;
+            }
+
+            .input {
+                background-color: var(--middle-grey);
+                color: var(--white-smoke); 
+            }
+            .hover-link-white{
+                color: var(--white-smoke);
+                text-decoration: none;
+            }
+            .hover-link-white:hover{
+                color: var(--white-smoke);
+                text-decoration: none;
+            }
+
+
+        /*audio player*/
+            .audio-player {
+                margin-top: 10px;
+                display: flex;
+                justify-content: right;
+                align-items: center;
+            }
+
+            .audio-player label {
+                margin-left: 20px;
+                margin-right: 10px;
+                font-weight: bold;
+                color: var(--white-smoke);
+            }
+
+            .audio-player select {
+                background-color: var(--turquoise);
+                color: var(--white-smoke);
+                border: 1px solid var(--dark-grey);
+                border-radius: 4px;
+                padding: 6px;
+            }
+            .audio-player select:hover{
+                background-color: var(--orange);
+            }
+
+            .audio-player select:focus{
+                background-color: var(--turquoise);
+                color: var(--white-smoke);
+                border: 1px solid var(--dark-grey);
+                border-color: var(--orange);
+                box-shadow: 0 0 0 0.5px var(--orange);
+                border-radius: 4px;
+                padding: 6px;
+            }
+
+            .audio-player select.option:hover{
+                color: var(--orange);
+            }
+
+            /* Change speed option background color when hovered */
+            .audio-player option:hover{
+                color: var(--orange);
+            }
+
+            /*Dropdown content for the dropdown that changes all speeds*/
+            .dropdown-content select{
+                background-color: var(--turquoise);
+                color: var(--white-smoke);
+                border: 1px solid var(--dark-grey);
+                border-radius: 4px;
+                padding: 6px;
+            }
+
+            .dropdown-content select:hover{
+                background-color: var(--orange);
+            }
+
+            .dropdown-content select:focus{
+                background-color: var(--turquoise);
+                color: var(--white-smoke);
+                border: 1px solid var(--dark-grey);
+                border-color: var(--orange);
+                box-shadow: 0 0 0 0.5px var(--orange);
+                border-radius: 4px;
+                padding: 6px;
+            }
+            .dropdown-content select.option:focus{
+                color: var(--orange);
+            }
+
+            /* Change speed option background color when hovered */
+            .dropdown-content option:hover{
+                color: var(--orange);
+            }
+
+
+        </style>
+    </head>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
